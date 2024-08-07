@@ -1,6 +1,7 @@
 package db;
 
 import tools.config.ConfigProperties;
+import tools.config.IConfig;
 
 import java.sql.*;
 import java.util.Map;
@@ -14,52 +15,61 @@ public class MySqlDbConnector implements IDBConnector {
         connect(); //блок нестатической инициализации, будет вызван до контруктора
     }
 
-    private void connect() { //метод подключения к бд
-
-        Map<String, String> config = new ConfigProperties().getConfig();
-        try {
-            if (connection == null) {
-                connection = DriverManager.getConnection(String.format("jdbc:mysql://%s/%s", config.get("url"), config.get("db_name")), config.get("db_username"), config.get("db_password"));
+    private void connect() {
+        IConfig config = new ConfigProperties();
+        Map<String, String> settings = config.getConfig();
+        if (connection == null){
+            try {
+                connection = DriverManager
+                        .getConnection(settings.get("url") + "/" + settings.get("db_name"),
+                                settings.get("db_username"),
+                                settings.get("db_password"));
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            if (statement == null) {
+        }
+        if (statement == null) {
+            try {
                 statement = connection.createStatement();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
     }
 
-    public void execute(String sqlQuery) {
+    public void execute(String response) {
         try {
-            statement.execute(sqlQuery);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            statement.execute(response);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    public ResultSet executeResult(String sqlQuery) {
+    public ResultSet executeResult(String response) {
         try {
-            return statement.executeQuery(sqlQuery);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            return statement.executeQuery(response);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
         return null;
     }
 
     public void close() {
-        try {
-            if (statement != null) {
+        if (statement != null) {
+            try {
                 statement.close();
+                statement = null;
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
-            if (connection != null) {
+        }
+        if (connection != null) {
+            try {
                 connection.close();
+                connection = null;
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
         }
     }
-
-
 }

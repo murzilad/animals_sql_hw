@@ -6,5 +6,4 @@ import java.util.Properties;
 public interface IConfig {
 
     Map<String, String> getConfig();
-
 }

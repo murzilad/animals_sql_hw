@@ -3,42 +3,31 @@ package tables;
 import db.IDBConnector;
 import db.MySqlDbConnector;
 
-import java.sql.ResultSet;
-import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class AbsTable {
 
-    private String tableName;
-
-    private IDBConnector dbConnector;
+    protected String tableName;
+    protected IDBConnector dbConnector;
+    protected Map<String, String> columns;
 
     public AbsTable(String tableName) {
         this.tableName = tableName;
         this.dbConnector = new MySqlDbConnector();
-
     }
 
-    public void create(String... columns) {
-        this.dbConnector.execute(String.format("CREATE TABLE %s (%s)", tableName, String.join(", ", columns)));
+    public void create() {
+        String sqlRequest = String.format("CREATE TABLE IF NOT EXISTS %s (%s)", this.tableName, convertMapColumnsToString());
+        dbConnector = new MySqlDbConnector();
+        dbConnector.execute(sqlRequest);
+        dbConnector.close();
     }
 
-//    public void insert() {
-//        this.dbConnector.execute(String.format("INSERT INTO %s"));
-//
-//    }
-
-    public void delete() {
-        this.dbConnector.execute(String.format("DROP TABLE %s", tableName));
+    private String convertMapColumnsToString() {
+        final String result = columns.entrySet().stream()
+                .map((Map.Entry entry) -> String.format("%s %s", entry.getKey(), entry.getValue()))
+                .collect(Collectors.joining(", "));
+        return result;
     }
-
-
-    public ResultSet read(String... columns) {
-        String requestColumns = "*";
-
-        if (columns.length != 0) {
-            requestColumns = String.join(". ", columns);
-        }
-        return this.dbConnector.executeResult(String.format("SELECT %s FROM TABLE %s", requestColumns, tableName));
-    }
-
 }

@@ -1,6 +1,6 @@
 package factory;
 
-import animals.Animal;
+import objects.Animal;
 import animals.birds.Duck;
 import animals.pets.Cat;
 import animals.pets.Dog;
@@ -20,13 +20,16 @@ public class AnimalFactory {
         switch (animalData) {
 
             case CAT: {
-                return new Cat(scanner);
+//                return new Cat(scanner);
+                return new Cat();
             }
             case DOG: {
-                return new Dog(scanner);
+//                return new Dog(scanner);
+                return new Dog();
             }
             case DUCK: {
-                return new Duck(scanner);
+//                return new Duck(scanner);
+                return new Duck();
             }
         }
         return null;

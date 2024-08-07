@@ -1,14 +1,12 @@
 package animals.pets;
 
-import animals.Animal;
-
-import java.util.Scanner;
+import objects.Animal;
 
 public class Dog extends Animal {
 
-    public Dog(Scanner scanner) {
-        super(scanner);
-    }
+//    public Dog(Scanner scanner) {
+//        super(scanner);
+//    }
 
     //переопределяем метод say из родительского класса Animal
     @Override

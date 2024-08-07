@@ -1,15 +1,13 @@
 package animals.birds;
 
-import animals.Animal;
+import objects.Animal;
 import animals.IFlying;
-
-import java.util.Scanner;
 
 public class Duck extends Animal implements IFlying {
 
-    public Duck(Scanner scanner) {
-        super(scanner);
-    }
+//    public Duck(Scanner scanner) {
+//        super(scanner);
+//    }
 
     //переопределяем метод say из родительского класса Animal
     @Override
