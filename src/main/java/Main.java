@@ -70,8 +70,6 @@ public class Main {
                         }
                         createdAnimal.setName(name);
 
-
-                        //!!!!!!!!!!!!!!!!!!!!!!!!!!ВВОД ВОЗРАСТА ЖИВОТНОГО
                         String age = "";
                         while (true) {
                             System.out.printf("Введите возраст животного\n");
